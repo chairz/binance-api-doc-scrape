@@ -2,7 +2,7 @@ from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
 import telebot
-import schedule, time
+import schedule, time, pytz
 from datetime import datetime, timezone
 
 URLs = {'spot':'https://binance-docs.github.io/apidocs/spot/en/#change-log','futures':'https://binance-docs.github.io/apidocs/futures/en/#change-log','delivery':'https://binance-docs.github.io/apidocs/delivery/en/#change-log'}
@@ -21,7 +21,7 @@ def get_current_content(webpage, latest_date_idx, trade_type):
 	return content
 
 '''
-Update latest update date for future comparison
+Update latest date for future comparison
 '''
 def update_current_date(webpage, latest_date_idx, trade_type):
 	is_updated = False
@@ -62,7 +62,7 @@ def check_updates(webpage, trade_type):
 	print(current_date)
 
 def run_scraper():
-	telebot.send_message(f'RUNNING SCRAPER at {datetime.now()}')
+	telebot.send_message(f'RUNNING SCRAPER at {datetime.now(pytz.utc)}')
 	for trade_type, URL in URLs.items():
 		page = urlopen(URL)
 		html = page.read().decode("utf-8")
@@ -70,10 +70,10 @@ def run_scraper():
 		check_updates(soup.get_text(), trade_type)
 
 def heartbeat_check():
-	telebot.send_message(f'HEARTBEAT CHECK at {datetime.now()}')
+	telebot.send_message(f'HEARTBEAT CHECK at {datetime.now(pytz.utc)}')
 
 run_scraper() #run once before scheduled
-schedule.every().hour.do(heartbeat_check)
+schedule.every(2).hours.do(heartbeat_check)
 schedule.every(4).hours.do(run_scraper)
 
 while True:
