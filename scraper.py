@@ -62,7 +62,7 @@ def check_updates(webpage, trade_type):
 	print(current_date)
 
 def run_scraper():
-	telebot.send_message(f'RUNNING SCRAPER at {datetime.now(pytz.utc)}')
+	telebot.send_check_message(f'RUNNING SCRAPER at {datetime.now(pytz.utc)}')
 	for trade_type, URL in URLs.items():
 		page = urlopen(URL)
 		html = page.read().decode("utf-8")
@@ -70,11 +70,11 @@ def run_scraper():
 		check_updates(soup.get_text(), trade_type)
 
 def heartbeat_check():
-	telebot.send_message(f'HEARTBEAT CHECK at {datetime.now(pytz.utc)}')
+	telebot.send_check_message(f'HEARTBEAT CHECK at {datetime.now(pytz.utc)}')
 
 run_scraper() #run once before scheduled
-schedule.every(2).hours.do(heartbeat_check)
-schedule.every(4).hours.do(run_scraper)
+schedule.every(4).hours.do(heartbeat_check)
+schedule.every(8).hours.do(run_scraper)
 
 while True:
 	schedule.run_pending()
