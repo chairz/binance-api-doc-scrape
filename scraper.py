@@ -78,7 +78,6 @@ def check_updates(webpage, trade_type):
 
 
 def run_scraper():
-    telebot.send_check_message(f'RUNNING SCRAPER at {datetime.now(pytz.utc)}')
     for trade_type, URL in URLs.items():
         page = urlopen(URL)
         html = page.read().decode("utf-8")
