@@ -6,7 +6,6 @@ from pathlib import Path
 from urllib.request import urlopen
 
 import pytz
-import datetime
 
 import schedule
 from bs4 import BeautifulSoup
